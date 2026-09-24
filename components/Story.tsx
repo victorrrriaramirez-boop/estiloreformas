@@ -1,32 +1,13 @@
 "use client";
 import { motion, MotionValue, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
-import Visual from "./Visual";
 const steps=[
-  {num:"01", title:"Planificación", text:"Medimos, definimos prioridades y ordenamos cada partida antes de empezar."},
-  {num:"02", title:"Demolición", text:"Retiramos lo necesario con una secuencia de obra clara y controlada."},
-  {num:"03", title:"Instalaciones", text:"Electricidad, fontanería y climatización se integran antes de cerrar superficies."},
-  {num:"04", title:"Acabados", text:"Materiales, iluminación y carpinterías convierten la obra en un espacio terminado."}
+ {n:"01",k:"Lectura",t:"Medimos la vivienda, detectamos condicionantes y convertimos necesidades en prioridades."},
+ {n:"02",k:"Plano",t:"La distribución se decide antes que los acabados: recorridos, luz, almacenaje y proporciones."},
+ {n:"03",k:"Vacío",t:"La demolición deja visible el espacio real y prepara el soporte para la nueva organización."},
+ {n:"04",k:"Infraestructura",t:"Electricidad, fontanería y climatización se coordinan antes de cerrar paredes y techos."},
+ {n:"05",k:"Materia",t:"Revestimientos, madera, pintura e iluminación empiezan a construir la atmósfera final."},
+ {n:"06",k:"Habitar",t:"Remates, pruebas y una última revisión convierten la obra en una vivienda lista para usarse."}
 ];
-function StoryStep({s,i,progress}:{s:(typeof steps)[number];i:number;progress:MotionValue<number>}){
- const start=i/steps.length, mid=(i+.5)/steps.length, end=(i+1)/steps.length;
- const opacity=useTransform(progress,[Math.max(0,start-.05),mid,Math.min(1,end+.05)],[.16,1,.16]);
- const x=useTransform(progress,[start,mid,end],[18,0,-12]);
- return <motion.article style={{opacity,x}} className="story-step"><span>{s.num}</span><div><h3>{s.title}</h3><p>{s.text}</p></div></motion.article>
-}
-export default function Story(){
- const ref=useRef<HTMLDivElement>(null);
- const {scrollYProgress}=useScroll({target:ref,offset:["start start","end end"]});
- const progress=useSpring(scrollYProgress,{stiffness:85,damping:24,mass:.35});
- const y=useTransform(progress,[0,1],["7%","-7%"]);
- const scale=useTransform(progress,[0,.5,1],[.9,1.04,.94]);
- const rotate=useTransform(progress,[0,1],[-2,2]);
- const bar=useTransform(progress,[0,1],["0%","100%"]);
- return <section ref={ref} id="story" className="story-wrap">
-   <div className="story-sticky shell">
-    <div className="story-copy"><p className="eyebrow">SCROLLYTELLING</p><h2>Una reforma no empieza con un martillo. Empieza con una decisión bien pensada.</h2><div className="story-steps">{steps.map((s,i)=><StoryStep key={s.num} s={s} i={i} progress={progress} />)}</div></div>
-    <motion.div className="story-visual" style={{y,scale,rotate}}><Visual stage={0}/></motion.div>
-    <div className="story-progress"><motion.i style={{width:bar}}/></div>
-   </div>
- </section>
-}
+function Step({s,i,p}:{s:(typeof steps)[number];i:number;p:MotionValue<number>}){const a=i/steps.length,b=(i+.5)/steps.length,c=(i+1)/steps.length;const opacity=useTransform(p,[a,b,c],[.12,1,.12]);const x=useTransform(p,[a,b,c],[24,0,-18]);return <motion.div className="story-step" style={{opacity,x}}><span>{s.n}</span><div><h3>{s.k}</h3><p>{s.t}</p></div></motion.div>}
+export default function Story(){const ref=useRef<HTMLElement>(null);const {scrollYProgress}=useScroll({target:ref,offset:["start start","end end"]});const p=useSpring(scrollYProgress,{stiffness:75,damping:25,mass:.28});const plan=useTransform(p,[0,.18,.38],[1,1,0]);const wall=useTransform(p,[.18,.42],[0,1]);const services=useTransform(p,[.34,.60],[0,1]);const finish=useTransform(p,[.56,.84],[0,1]);const furniture=useTransform(p,[.76,1],[0,1]);const rotate=useTransform(p,[0,1],[-3,1]);const bar=useTransform(p,[0,1],["0%","100%"]);const furnitureY=useTransform(furniture,[0,1],[22,0]);const furnitureScale=useTransform(furniture,[0,1],[.5,1]);return <section ref={ref} id="story" className="story-wrap reform-story"><div className="story-sticky shell"><div className="story-copy"><p className="eyebrow">SCROLL 01 · EL PROCESO</p><h2>De plano a hogar, sin saltarse ninguna capa.</h2><div className="story-steps">{steps.map((s,i)=><Step key={s.n} s={s} i={i} p={p}/>)}</div></div><motion.div className="story-visual" style={{rotate}}><div className="plan-scene"><motion.div className="plan-paper" style={{opacity:plan}}><i/><i/><i/><span>PLANTA 01</span></motion.div><motion.div className="build-wall w1" style={{scaleY:wall}}/><motion.div className="build-wall w2" style={{scaleX:wall}}/><motion.div className="service-lines" style={{opacity:services}}><i/><i/><i/></motion.div><motion.div className="finish-plane" style={{opacity:finish}}/><motion.div className="furniture f-sofa" style={{opacity:furniture,y:furnitureY}}/><motion.div className="furniture f-table" style={{opacity:furniture,scale:furnitureScale}}/><div className="scene-label">NOVA / PROJECT 24</div></div></motion.div><div className="story-progress"><motion.i style={{width:bar}}/></div></div></section>}

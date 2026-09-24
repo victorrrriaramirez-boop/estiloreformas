@@ -1,4 +1,8 @@
-# NOVA Reforma — Next.js + Scrollytelling + SEO
+# NOVA Reforma — demo SEO + scrollytelling
+
+**Dirección visual:** Editorial / interiorismo: serif, composición asimétrica, materiales y antes/después.
+
+Esta versión incluye dos experiencias de scrollytelling en la Home, responsive y preparada para GitHub/Vercel.
 
 Plantilla demo preparada para GitHub y Vercel. Incluye diseño premium responsive, scrollytelling con Framer Motion y estructura SEO multipágina.
 
